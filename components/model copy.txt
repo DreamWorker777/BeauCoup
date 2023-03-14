@@ -1,0 +1,387 @@
+import {
+  OrbitControls,
+  Scroll,
+  ScrollControls,
+  SpotLight,
+  useGLTF,
+  useScroll,
+  useTexture,
+} from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import THREE, { MeshStandardMaterial, Vector3, Quaternion, Euler, Matrix4 } from "three";
+import { damp } from "three/src/math/MathUtils";
+
+const Model = () => {
+  // Load Model
+  const { scene, nodes, animations } = useGLTF("lol.glb");
+
+  // Load Textures
+  const Body = useTexture([
+    "/Assets/mark-farias-dt60oksDTx8-unsplash.jpg",
+    "/Assets/ludvig-wiese-d-MfHM-jHwc-unsplash.jpg",
+    "/Assets/Asset_4.png",
+    "/Assets/Asset_5.png",
+    "/Assets/x_alb2x.png",
+    "/Assets/love_alb2x.png",
+    "/Assets/text2x.png",
+    "/Assets/concrete.png",
+    "/Assets/metal.png",
+    "/Assets/slider.png",
+  ]);
+
+  // Create Materials
+  let map0, map1, map2, map3, map4, map5, map6, map7, map8;
+  let coloronly = new MeshStandardMaterial({
+    color: "#fb00ff",
+    depthTest: true,
+    depthWrite: true,
+  });
+  let coloronly1 = new MeshStandardMaterial({
+    color: "#ff0000",
+  });
+
+  let coloronly2 = new MeshStandardMaterial({
+    color: "#0d0d0d",
+    map: Body[7],
+  });
+  let coloronly3 = new MeshStandardMaterial({
+    color: "#00ff00",
+  });
+  let coloronly4 = new MeshStandardMaterial({
+    color: "#0a0a0a",
+    map: Body[8],
+  });
+  let coloronly5 = new MeshStandardMaterial({
+    color: "#000000",
+    map: Body[8],
+  });
+  map0 = new MeshStandardMaterial({
+    map: Body[1],
+    // color: "#ff0000",
+  });
+  map1 = new MeshStandardMaterial({
+    map: Body[0],
+    // color: "#ff0000",
+  });
+  map2 = new MeshStandardMaterial({
+    map: Body[2],
+    color: "#00ff00",
+    transparent: true,
+  });
+
+  map3 = new MeshStandardMaterial({
+    map: Body[3],
+    transparent: true,
+    color: "#00ff00",
+  });
+  map4 = new MeshStandardMaterial({
+    map: Body[4],
+    transparent: true,
+    color: "#00ff00",
+  });
+  map5 = new MeshStandardMaterial({
+    map: Body[5],
+    transparent: true,
+    color: "#00ff00",
+  });
+
+  map6 = new MeshStandardMaterial({
+    map: Body[6],
+    transparent: true,
+  });
+  map7 = new MeshStandardMaterial({
+    map: Body[6],
+    transparent: true,
+    color: "#00ff00",
+  });
+  map8 = new MeshStandardMaterial({
+    map: Body[9],
+    transparent: true,
+  });
+
+  const WithoutMAP = [
+    // { childID: "Plane", mtl: new_mtl },Ground Fog
+    { childID: "Cylinder016", mtl: coloronly3 },
+    { childID: "1thfloor", mtl: coloronly4 },
+    { childID: "2thfloor", mtl: coloronly4 },
+    { childID: "3thfloor", mtl: coloronly4 },
+    { childID: "4thfloor", mtl: coloronly4 },
+    { childID: "Cube005", mtl: coloronly4 },
+    // { childID: "Cylinder021", mtl: coloronly3 },
+    { childID: "Cube007", mtl: coloronly4 },
+    { childID: "Cube008", mtl: coloronly3 },
+    { childID: "Cube014", mtl: coloronly2 },
+    { childID: "Cube025", mtl: coloronly2 },
+    { childID: "Cube076", mtl: coloronly2 },
+    { childID: "Road1", mtl: coloronly2 },
+    { childID: "Road2", mtl: coloronly2 },
+    { childID: "Road3", mtl: coloronly2 },
+    { childID: "Road4", mtl: coloronly2 },
+    { childID: "Road5", mtl: coloronly2 },
+    { childID: "Text001", mtl: coloronly1 },
+    { childID: "Text", mtl: coloronly1 },
+    { childID: "Text002", mtl: coloronly1 },
+    { childID: "Text003", mtl: coloronly },
+    { childID: "Text004", mtl: coloronly1 },
+    { childID: "Text005", mtl: coloronly1 },
+    { childID: "Text008", mtl: coloronly },
+    { childID: "Text009", mtl: coloronly1 },
+    { childID: "Text010", mtl: coloronly1 },
+    { childID: "Text011", mtl: coloronly1 },
+    { childID: "Text012", mtl: coloronly1 },
+    { childID: "Text013", mtl: coloronly3 },
+    { childID: "Text014", mtl: coloronly1 },
+    { childID: "Text015", mtl: coloronly1 },
+    { childID: "Text016", mtl: coloronly1 },
+    { childID: "Text017", mtl: coloronly1 },
+    { childID: "G-__556086.005", mtl: coloronly },
+    { childID: "Plane010", mtl: coloronly },
+    { childID: "Plane011", mtl: coloronly },
+    { childID: "Plane012", mtl: coloronly },
+    { childID: "Plane015", mtl: coloronly },
+    { childID: "Balcony_Strips", mtl: coloronly2 },
+    // { childID: "Ground_Fog", mtl: coloronly2 },G-__556086.005
+  ];
+  const WithMAP = [
+    { childID: "GroundFog", mtl: coloronly5 },
+    // beau
+    { childID: "Plane001", mtl: map2 },
+    // coup
+    { childID: "Plane008", mtl: map3 },
+    // team1
+    { childID: "Plane013", mtl: map0 },
+    // team2
+    { childID: "Plane014", mtl: map1 },
+    // cross
+    { childID: "Plane004", mtl: map4 },
+    // love
+    { childID: "Plane005", mtl: map5 },
+    // imgbytext
+    { childID: "Plane003", mtl: map1 },
+    // txt
+    { childID: "Plane006", mtl: map7 },
+    // slider
+    { childID: "Slider", mtl: map8 },
+  ];
+
+  const withTexture = (parent, type, mtl) => {
+    parent.traverse((o) => {
+      if (o.isMesh) {
+        if (o.name == type) {
+          o.material = mtl;
+          o.material.map.flipY = false;
+        }
+      }
+    });
+  };
+  const withoutTexture = (parent, type, mtl) => {
+    parent.traverse((o) => {
+      if (o.isMesh) {
+        if (o.name == type) {
+          o.material = mtl;
+        }
+      }
+    });
+  };
+
+  if (scene) {
+    for (let object of WithMAP) {
+      withTexture(scene, object.childID, object.mtl);
+    }
+  }
+  if (scene) {
+    for (let object of WithoutMAP) {
+      withoutTexture(scene, object.childID, object.mtl);
+    }
+    
+  }
+
+  useLayoutEffect(() =>
+    Object.values(nodes).forEach(
+      (node) => (node.receiveShadow = node.castShadow = true)
+    )
+  );
+
+  const [anim, setAnim] = useState<boolean>(true);
+  
+  // clearTimeout(myTimeout)
+  function animate() {
+    requestAnimationFrame(animate);
+    // glb.nodes.Slider.rotation.y += 0.01;
+    {anim && nodes.Text017.position.x == nodes.Text017.position.x + 0.01}
+  }
+
+  animate();
+  if (scene) {
+    const scroll = useScroll();
+    
+    useFrame((ev) => {
+      setAnim(false)
+      const offset = scroll.offset;
+      const v1 = new Vector3();
+      const v2 = new Vector3();
+      const v3 = new Vector3();
+      const v4 = new Vector3();
+      const v5 = new Vector3();
+      const l1 = new Vector3();
+      const l2 = new Vector3();
+      const l3 = new Vector3();
+      const l4 = new Vector3();
+      const l5 = new Vector3();
+      if (offset >= 0 && offset < 0.07) {
+        ev.camera.position.lerp(
+          v1.set(
+            offset * Math.PI * -10,
+            offset * Math.PI * 2 * 20,
+            ((offset * Math.PI) / 3) * 100
+          ),
+          0.1
+        );
+        ev.camera.lookAt(l1.set(0, 1, 18));
+        // ev.camera.updateProjectionMatrix();
+      }
+      if (offset >= 0.07 && offset < 0.21) {
+        
+        l1.set(22, 30, 35)
+        ev.camera.lookAt(l1,5,0.01)
+        
+        ev.camera.position.lerp(
+          v2.set(
+            offset * Math.PI * -2,
+            offset * Math.PI * 2 * 20,
+            ((offset * Math.PI) / 3) * 85
+          ),
+          1
+        );
+        // ev.camera.updateProjectionMatrix();
+      }
+
+      
+      if (offset >= 0.21 && offset < 0.34) {
+        ev.camera.position.lerp(
+          v3.set(
+            (1 - offset) * -2,
+            offset * Math.PI * 2.3 * 19.5,
+            (((1 - offset) * Math.PI) / 3) * 25
+          ),
+          1
+        );
+        ev.camera.lookAt(l3.set(105, 50, -20));
+
+        ev.camera.updateProjectionMatrix();
+      }
+
+      if (offset >= 0.34 && offset < 0.5) {
+        if (offset > 0.4) {
+          ev.camera.lookAt(l4.set(0, 65, 30));
+        } else {
+          ev.camera.lookAt(l4.set(0, 45, 30));
+        }
+        ev.camera.position.lerp(
+          v4.set(
+            (1 - offset) * 30,
+            offset * (Math.PI * 2.5) * 20.5,
+            (((1 - offset) * Math.PI) / 3) * 0
+          ),
+          1
+        );
+      }
+      if (offset >= 0.5 && offset < 0.7) {
+        ev.camera.lookAt(l5.set(50, 80, 30));
+
+        ev.camera.position.lerp(
+          v4.set(
+            (1 - offset) * 7,
+            offset * (Math.PI * 2.5) * 20.5,
+            (1 - offset) * Math.PI * 3 * 0.8
+          ),
+          1
+        );
+      }
+      if (offset >= 0.7 && offset < 0.9) {
+        ev.camera.lookAt(l5.set(-30, 200, 0));
+        setAnim(false);
+        ev.camera.position.lerp(
+          v4.set(
+            offset * 50,
+            Math.tan(offset) * Math.sin(-100) * 200,
+            (1 - offset) * Math.sin(-100) * 3 * 50
+          ),
+          1
+        );
+      }
+      if (offset >= 0.9 && offset < 1) {
+        ev.camera.lookAt(l5.set(-30, 200, -80));
+        setAnim(true);
+        ev.camera.position.lerp(
+          v4.set(
+            offset * 40,
+            Math.atan((1.5 - offset) * (Math.PI * 50)) * 150,
+            50
+          ),
+          1
+        );
+      }
+    });
+  }
+  return (
+    <>
+      <group position={[22, -3.5, 6.5]} scale={1} rotation={[0, -2, 0]}>
+        <EffectComposer>
+          <Bloom luminanceThreshold={0} luminanceSmoothing={0.2} height={100} />
+          <primitive object={scene} />
+        </EffectComposer>
+        {/* <OrbitControls
+          enablePan={false}
+          enableZoom={true}
+          enableRotate={true}
+        /> */}
+      </group>
+    </>
+  );
+};
+
+// useGLTF.preload("/building_Beau_Coup_v4_simplified1.glb");
+
+export default Model;
+
+{
+  /* <SpotLight
+        position={[-8.3, -1.4, 13.15]}
+        target={glb.nodes.Cube002}
+        color="#9c832c"
+        distance={3}
+        angle={0.15}
+        attenuation={10}
+        anglePower={2} 
+      />
+      <SpotLight
+        position={[-6.3, -1.4, 13.15]}
+        target={glb.nodes.Cube006}
+        color="#9c832c"
+        distance={3}
+        angle={0.15}
+        attenuation={10}
+        anglePower={2} 
+      />
+      <SpotLight
+        position={[-4.3, -1.4, 13.15]}
+        target={glb.nodes.Cube010}
+        color="#9c832c"
+        distance={3}
+        angle={0.15}
+        attenuation={10}
+        anglePower={2} 
+      />
+      <SpotLight
+        position={[-2.3, -1.4, 13.15]}
+        target={glb.nodes.Cube015}
+        color="#9c832c"
+        distance={3}
+        angle={0.15}
+        attenuation={10}
+        anglePower={2} 
+      /> */
+}

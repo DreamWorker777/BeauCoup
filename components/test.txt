@@ -1,0 +1,147 @@
+
+ const Logo = new MeshPhongMaterial({ color: 0x000000, shininess: 5 });
+ const Cylinder = new MeshPhongMaterial({ color: 0xffffff, shininess: 5 });
+ const Body = new MeshPhongMaterial({ color: 0x000000, shininess: 5 });
+
+ const INITIAL_MAP = [
+   { childID: "NAME_OF_THE_LAYER_YOU_WANT_TO_CHANGE", mtl: Logo },
+   { childID: "NAME_OF_THE_LAYER_YOU_WANT_TO_CHANGE", mtl: Cylinder },
+ ];
+
+ const initColor = (parent, type, mtl) => {
+   parent.traverse(o => {
+     if (o.isMesh) {
+       if (o.name.includes(type)) {
+         o.material = mtl;
+         o.nameID = type;
+       }
+     }
+   });
+ }
+
+ if (fbx) {
+   for (let object of INITIAL_MAP) {
+     initColor(fbx, object.childID, object.mtl);
+   }
+ }
+
+
+import {
+  OrbitControls,
+  useAnimations,
+  useFBX,
+  useTexture,
+} from "@react-three/drei";
+import { useEffect, useCallback, useState } from "react";
+import { useFrame, useLoader } from "@react-three/fiber";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { MeshPhongMaterial } from "three/src/Three";
+
+const model = () => {
+  // Load Model
+  const fbx = useLoader(FBXLoader, "./ASSASSIN_07.fbx");
+  // Load Textures
+  const Body = useTexture([
+    "./Emission.png",
+    "./AlbedoTransparency.png",
+    "./MetallicSmoothness.png",
+    "./Normal.png",
+  ]);
+
+  // Create Materials
+  let new_mtl;
+  new_mtl = new MeshPhongMaterial({
+    emissiveMap: Body[0],
+    map: Body[1],
+    normalMap: Body[3],
+    aoMap: Body[2],
+  });
+
+  const INITIAL_MAP = [{ mtl: new_mtl }];
+
+  // Function to apply texture
+  const initTexture = (parent, mtl) => {
+    parent.traverse((o) => {
+      if (o.isMesh) {
+        o.material = mtl;
+      }
+    });
+  };
+
+  // Apply Texture
+  if (fbx) {
+    for (let object of INITIAL_MAP) {
+      initTexture(fbx, object.mtl);
+    }
+  }
+
+  // Load Animation
+  const walk = useFBX("./assasin@walking.fbx");
+  const turnLeft = useFBX("./assasin@turnleft.fbx");
+  const turnRight = useFBX("./assasin@turnright.fbx");
+  const idle = useFBX("./assasin@idle.fbx");
+
+  const x = useAnimations(idle.animations, fbx);
+  const y = useAnimations(walk.animations, fbx);
+  const w = useAnimations(turnLeft.animations, fbx);
+  const z = useAnimations(turnRight.animations, fbx);
+
+  const handleAnimate = useCallback(
+    async (event) => {
+      const { keyCode } = await event;
+
+      if (keyCode === 87) {
+        w.actions[w.names[w.names.length - 1]].reset().fadeIn(0.5).stop();
+        z.actions[z.names[z.names.length - 1]].reset().fadeIn(0.5).stop();
+        x.actions[x.names[x.names.length - 1]].reset().fadeIn(0.5).stop();
+        y.actions[y.names[y.names.length - 1]].reset().fadeIn(0.5).play();
+      }
+      if (keyCode === 65) {
+        w.actions[w.names[w.names.length - 1]].reset().fadeIn(0.5).stop();
+        z.actions[z.names[z.names.length - 1]].reset().fadeIn(0.5).stop();
+        x.actions[x.names[x.names.length - 1]].reset().fadeIn(0.5).stop();
+        w.actions[w.names[w.names.length - 1]].reset().fadeIn(0.5).play();
+      }
+      if (keyCode === 68) {
+        z.actions[z.names[z.names.length - 1]].reset().fadeIn(0.5).play();
+      }
+      if (keyCode === 83) {
+        x.actions[x.names[x.names.length - 1]].reset().fadeIn(0.5).play();
+      }if (keyCode === 83) {
+        x.actions[x.names[x.names.length - 1]].reset().fadeIn(0.5).stop();
+      }
+    },
+    [
+      y.actions[y.names[y.names.length - 1]].reset().fadeIn(0.5).play(),
+      w.actions[w.names[w.names.length - 1]].reset().fadeIn(0.5).play(),
+      z.actions[z.names[z.names.length - 1]].reset().fadeIn(0.5).play(),
+      x.actions[x.names[x.names.length - 1]].reset().fadeIn(0.5).play(),
+    ]
+  );
+
+  // Detect input change
+  useEffect(() => {
+    window.addEventListener("keydown", handleAnimate);
+    return () => {
+      window.removeEventListener("keydown", handleAnimate);
+    };
+  }, [handleAnimate, z, x, y, w]);
+
+  // x.actions[x.names[x.names.length - 1]].reset().fadeIn(0.5).play();
+  // Apply Animation
+
+  return (
+    <>
+      <group position={[0, -75, 0]}>
+        <primitive object={fbx} />
+        <OrbitControls
+          enablePan={false}
+          enableZoom={true}
+          enableRotate={true}
+        />
+      </group>
+    </>
+  );
+};
+
+export default model;

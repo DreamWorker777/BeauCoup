@@ -1,0 +1,454 @@
+@font-face {
+  font-family: "odachi";
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+  src: url(../public/Assets/nav/Odachi.woff) format("woff");
+}
+
+@font-face {
+  font-family: 'Poppin';
+  src: url(../public/Assets/nav/Poppins-Medium.ttf) format('truetype');
+}
+
+.roadmap {
+  width: 60vw;
+  color: #00ff00;
+  font-size: 7px;
+  transform: translate3d(-40%, -70%, 0);
+
+  img {
+    width: 100% !important;
+  }
+
+  .teamText {
+    color: #26ff00;
+    text-align: center;
+    font-size: 26px;
+    position: absolute;
+    
+    .title {
+      font-family: 'Odachi';
+      font-size: 40px;
+      margin-block-start: .5rem;
+      margin-block-end: .5rem;
+    }
+  }
+
+  
+
+  .part1 {
+    // position: relative;
+    width: 100%;
+    height: 50px;
+
+    .text {
+      width: 50%;
+      height: 100%;
+      position: absolute;
+      background-image: url('../public/Assets/frame.png');
+      background-repeat: no-repeat;
+      // background-size: contain;
+      background-size: 80px 90px;
+      // background-position: center;
+      padding: 5px;
+    }
+
+    .line {
+      position: absolute;
+      width: 100px;
+      background-color: #00ff00;
+      height: 1px;
+      margin-top: 10%;
+      margin-left: 33%;
+    }
+
+    .circle {
+      position: absolute;
+      background-color: #00ff00;
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      margin-top: 8%;
+      margin-left: 70%;
+    }
+  }
+
+  .part2 {
+    position: relative;
+
+    .text {
+      padding: 5px;
+    }
+  }
+}
+
+.menu {
+  position: fixed;
+  padding-top: 80px;
+  padding-bottom: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-family: "odachi";
+  font-size: 60px;
+  width: 24%;
+  height: 70%;
+  left: 20px;
+  bottom: 20px;
+  background: linear-gradient(135deg, transparent 10%, rgb(0, 255, 0) 10%, rgb(0, 255, 0) 90%, transparent 90%);
+
+  .buttons {
+    text-align: center;
+
+    .button {
+      margin-top: 40px;
+      margin-bottom: 40px;
+      opacity: 0.7;
+    }
+
+    .button:hover {
+      opacity: 1;
+      cursor: pointer;
+      transition: 0.5s;
+    }
+  }
+
+  .closeButton {
+    left: 10px;
+    opacity: 0.7;
+  }
+
+  .closeButton:hover {
+    cursor: pointer;
+    opacity: 1;
+    transition: 0.5s;
+  }
+}
+
+.menuButton {
+  position: fixed;
+  bottom: 20px;
+  font-size: 30px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 50px;
+  padding-right: 100px;
+
+  .hamburger {
+    opacity: 0.7;
+  }
+
+  .hamburger:hover {
+    cursor: pointer;
+    opacity: 1;
+    transition: 0.5s;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    align-items: center;
+
+    .button {
+      opacity: 0.7;
+    }
+
+    .button:hover {
+      opacity: 1;
+      cursor: pointer;
+      transition: 0.5s;
+    }
+  }
+}
+
+
+
+.scene {
+  width: 100vw;
+  height: 100vh;
+  /* background-color: #eec200; */
+}
+
+.canvas {
+  display: flex;
+  background: #000;
+}
+
+.nav {
+  position: absolute;
+  width: 100vw;
+  height: 12vh;
+  left: -50vw;
+  bottom: -50vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 50px;
+  // background-color: #0000ff;
+  font-family: odachi;
+}
+
+.toggleContainer {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+  :first-child {
+    width: 50px;
+    transition: 0.3s all;
+  }
+
+  :last-child {
+    width: 50px;
+    transition: 0.3s all;
+  }
+}
+
+.toggleContainer:hover {
+  :first-child {
+    transform: translateX(6px);
+  }
+
+  :last-child {
+    transform: translateX(-6px);
+  }
+}
+
+.menuContainer {
+  width: 20vw;
+  display: flex;
+  // padding: 0 20px;
+  align-items: center;
+  justify-content: space-evenly;
+
+  .pentagon {
+    background: #00ff00;
+    height: 5vh;
+    width: 12vw;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    border-top-right-radius: 20px;
+    justify-content: center;
+  }
+
+  :nth-child(2) {
+    color: #d0d0d0;
+    cursor: pointer;
+  }
+
+  .social {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.popUp {
+  height: 70vh;
+  width: 27.3vw;
+  left: -48vw;
+  bottom: -48vh;
+  position: absolute;
+
+  .toggleWrapper {
+    background-image: url("/Assets/nav/Path_Toggle.png");
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    // width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .toggleContent {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+
+      div {
+        height: 100px;
+        width: 15vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        p {
+          font-family: odachi;
+          font-size: 35px;
+          transition: 0.3s all;
+          cursor: pointer;
+        }
+
+        :hover {
+          font-size: 40px;
+          font-weight: bolder;
+        }
+      }
+    }
+
+    .closeBtn {
+      position: absolute;
+      background-image: url("/Assets/nav/XClose.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 50px;
+      width: 50px;
+      left: 10px;
+      bottom: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
+.teamContainer {
+  width: 60vw;
+  height: 90vh;
+  // margin-top: -10%;
+  // margin-left: -26%;
+  // transform: rotateY(180deg);
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+
+
+  .collection {
+    // height:100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    position: relative;
+
+    // position: absolute;
+    // transform: translateX(-50%);
+    .teamWrapper {
+      // height: 20vh;
+      display: flex;
+      justify-content: flex-start;
+      position: relative;
+      // background-color: #d0d0d0;
+      // display: block;
+
+      .teamImage {
+        // background-color: #d0d0d0;
+        // height: 80%;
+        width: 100%;
+        // filter: grayscale(0.2);
+      }
+
+      .teamText {
+        color: #26ff00;
+        text-align: center;
+        font-size: 7px;
+        position: absolute;
+        
+        .title {
+          font-family: 'Odachi';
+          font-size: 13px;
+          margin-block-start: .5rem;
+          margin-block-end: .5rem;
+        }
+      }
+
+      .label {
+        position: absolute;
+        background-image: url('../public/Assets/frame.png');
+        background-repeat: no-repeat;
+        // background-size: auto;
+        background-size: 135px 165px;
+        // background-position: center;
+        // background-color: #00ff00;
+        // border: 2px ridge #fff;
+        // height: 30%;
+        width: 40%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 0px;
+        padding-top: 5px;
+        align-items: flex-end;
+        text-align: end;
+        left: 0;
+        // margin-top: 20%;
+        color: #00ff00;
+
+        // clip-path: polygon(
+        //   20% 0%,
+        //   80% 0%,
+        //   100% 0,
+        //   100% 80%,
+        //   80% 100%,
+        //   0 100%,
+        //   0% 80%,
+        //   0% 20%
+        // );
+        h1 {
+          // margin-top: 5px;
+          font-size: 13px;
+          // margin-bottom: 2px;
+          font-family: "odachi";
+        }
+
+        p {
+          // margin-top: 0px;
+          font-family: 'Poppin';
+          font-size: 8px;
+        }
+      }
+
+      .line {
+        position: absolute;
+        height: 1px;
+        width: 10%;
+        margin-left: 40%;
+        background-color: #00ff00;
+        left: 0;
+        margin-top: 35%;
+      }
+
+      .line2 {
+        position: absolute;
+        height: 1px;
+        width: 9%;
+        left: 48.6%;
+        background-color: #00ff00;
+        margin-top: 32.3%;
+        transform: rotate(-40deg);
+      }
+
+      .circle {
+        position: absolute;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        margin-left: 55%;
+        background-color: #00ff00;
+        left: 0;
+        margin-top: 28%;
+      }
+    }
+  }
+}
+
+.roadMapImage {
+  width: 100%;
+  position: relative;
+  height: 60vh;
+}
+
+.teamImage {
+  position: relative;
+  width: 100%;
+  height: 75vh;
+}
+

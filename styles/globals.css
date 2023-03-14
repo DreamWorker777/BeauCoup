@@ -1,0 +1,85 @@
+@font-face {
+  font-family: 'Odachi';
+  src: local('Odachi'),
+       url('../public/Assets/fonts/Odachi/Odachi.ttf') format('truetype'), /* Super Modern Browsers */
+}
+
+@font-face {
+  font-family: 'Edosz';
+  src: local('Edosz'),
+       url('../public/Assets/fonts/Edo_SZ_Font_Family/Edo SZ 400.ttf') format('truetype'), /* Super Modern Browsers */
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+.swiper {
+  /* margin: 100px auto; */
+  width: 100%;
+  height: auto;
+  margin-left: 0px !important;
+  /* height: 250px;  */
+  /* background-color: #000; */
+}
+
+.roadmapSwiper.swiper{
+    width: 100%;
+    height: auto;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #000;
+}
+.swiper-pagination > span {
+  background-color: aliceblue;
+}
+
+.scroll-up {
+  position: absolute;
+  left: 42%;
+  z-index: 99;
+  cursor: pointer;
+}
+
+.teamWrapper1 {
+  /* // height: 20vh; */
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  margin-top: 0px;
+  margin-right: 95px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.warn {
+  animation-name: example;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  padding-top: 0px;
+}
+
+@keyframes example {
+  0%   {padding-top: 0px;}
+  40%  {padding-top: 10px;}
+  50%  {padding-top: 0px;}
+  100% {padding-top: 0px;}
+}
